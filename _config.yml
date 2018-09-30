@@ -103,9 +103,9 @@ analytics:
 author:
   name             : "Sanjay Raghuwanshi"
   avatar           : "assets/images/bio_pic.png" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "Data Science portfolio"
+  bio              : "Data Science and Machine Learning Enthusiast"
   location         : "Delhi, India"
-  email            : sanjay.r.iitg@gmail.com
+  #email            : sanjay.r.iitg@gmail.com
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
