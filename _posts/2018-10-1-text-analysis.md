@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: "post"
 title: "Data Extraction and Text Analysis of SEC/EDGAR Financial Reports"
 
 ---
