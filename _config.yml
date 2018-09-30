@@ -107,6 +107,15 @@ author:
   location         : "Delhi, India"
   #email            : sanjay.r.iitg@gmail.com
   links:
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/sanjay-raghu"
+    - label: "Linkedin"
+      icon: "fab fa-fw fa-linkedin"      
+      url: "https://www.linkedin.com/in/sanjayiitg/"
+    - label: "Facebook"
+      icon: "fab fa-fw fa-facebook-square"
+      url: "https://facebook.com/sanjay11100"
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
       url: mailto:sanjay.r.iitg@gmail.com
@@ -116,12 +125,6 @@ author:
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
       # url: "https://twitter.com/"
-    - label: "Facebook"
-      icon: "fab fa-fw fa-facebook-square"
-      url: "https://facebook.com/sanjay11100"
-    - label: "GitHub"
-      icon: "fab fa-fw fa-github"
-      url: "https://github.com/sanjay-raghu"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
       # url: "https://instagram.com/"
