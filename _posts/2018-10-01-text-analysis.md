@@ -1,5 +1,9 @@
 ---
 title: "Data Extraction and Text Analysis of SEC/EDGAR Financial Reports"
+tags:
+  - text analysis
+  - data extraction
+  - sentiment analysis
 ---
 this is a new post ddff
 
