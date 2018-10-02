@@ -1,7 +1,7 @@
 ---
-layout: archive
+layout: tags
 permalink: /all_projects/
 title: "Posts By Tags"
 auther_profiles: true
 ---
-list of all posts tages
+list of all aa posts tages
