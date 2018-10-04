@@ -299,5 +299,6 @@ defaults:
       layout: single
       author_profile: true
       classes: wide
+      comments: true
 
       
