@@ -1,6 +1,7 @@
 ---
 title: "About"
 permalink: /about/
+classes: wide
 # header:
 #	image: "assets/images/about_header.jpg"
 	
