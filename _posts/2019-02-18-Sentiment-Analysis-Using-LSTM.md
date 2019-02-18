@@ -112,3 +112,111 @@ output will be something like this
   </tbody>
 </table>
 
+A few things to notice here
+- "RT @..." in start of every tweet
+- a lot of special characters <br>
+We have to remove all this noise also lets convert text into lower case.
+
+```python
+data['text'] = data['text'].apply(lambda x: x.lower()) #lower caseing
+data['text'] = data['text'].apply((lambda x: re.sub('[^a-zA-z0-9\s]','',x))) # removing special chars
+data['text'] = data.text.str.replace('rt','') # removing "rt"
+```
+
+Lets see the data again
+```python
+data.head()
+```
+
+You should see something like this
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>text</th>
+      <th>sentiment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>scottwalker didnt catch the full gopdebate la...</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>robgeorge that carly fiorina is trending  hou...</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>danscavino gopdebate w realdonaldtrump delive...</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>gregabbott_tx tedcruz on my first day i will ...</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>warriorwoman91 i liked her and was happy when...</td>
+      <td>Negative</td>
+    </tr>
+  </tbody>
+</table>
+
+This looks better.<br>
+Lets pre-process the data so that we can use it to train the model
+- Tokenize
+- Padding (to make all sequence of same lengths)
+- Converting sentiments into numerical data(One-hot form)
+- train test split
+
+
+```python
+max_fatures = 2000
+tokenizer = Tokenizer(num_words=max_fatures, split=' ')
+tokenizer.fit_on_texts(data['text'].values)
+X = tokenizer.texts_to_sequences(data['text'].values)
+X = pad_sequences(X)
+# print(X[:2])
+
+Y = pd.get_dummies(data['sentiment']).values
+X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 0.20, random_state = 42)
+print(X_train.shape,Y_train.shape)
+
+```
+Next, I compose the LSTM Network. Note that **embed_dim**, **lstm_out**, **batch_size**, **droupout_x** variables are hyper parameters, their values are somehow intuitive, can be and must be played with in order to achieve good results. Please also note that I am using softmax as activation function. The reason is that our Network is using categorical crossentropy, and softmax is just the right activation method for that.
+
+```python
+embed_dim = 128
+lstm_out = 196
+
+model = Sequential()
+model.add(Embedding(max_fatures, embed_dim,input_length = X.shape[1]))
+model.add(SpatialDropout1D(0.4))
+model.add(LSTM(lstm_out, dropout=0.2, recurrent_dropout=0.2))
+model.add(Dense(2,activation='softmax'))
+model.compile(loss = 'categorical_crossentropy', optimizer='adam',metrics = ['accuracy'])
+print(model.summary())
+```
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+embedding_1 (Embedding)      (None, 28, 128)           256000    
+_________________________________________________________________
+spatial_dropout1d_1 (Spatial (None, 28, 128)           0         
+_________________________________________________________________
+lstm_1 (LSTM)                (None, 196)               254800    
+_________________________________________________________________
+dense_1 (Dense)              (None, 2)                 394       
+=================================================================
+Total params: 511,194
+Trainable params: 511,194
+Non-trainable params: 0
+_________________________________________________________________
+None
+
+
