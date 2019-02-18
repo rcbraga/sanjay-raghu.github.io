@@ -10,8 +10,7 @@ tags:
 ---
 [Github](https://github.com/sanjay-raghu) <br/>
 [Linkedin](https://www.linkedin.com/in/sanjayiitg/) <br/>
-
-...
+---
 
 **Sentiment Analysis:** the process of computationally identifying and categorizing opinions expressed in a piece of text, especially in order to determine whether the writer's attitude towards a particular topic, product, etc. is positive, negative, or neutral.
 
@@ -40,8 +39,6 @@ This data originally came from [Crowdflower's Data for Everyone library](http://
 
 
 ## Lets start coding
-
----
 ### Importing usefull packages
 Lets first import all libraries that will be using. 
 
@@ -199,9 +196,8 @@ print(X_train.shape,Y_train.shape)
 ```
 
 ---
-
 ### Defining model
-> Next, I compose the LSTM Network. Note that **embed_dim**, **lstm_out**, **batch_size**, **droupout_x** variables are hyper parameters, their values are somehow intuitive, can be and must be played with in order to achieve good results. Please also note that I am using softmax as activation function. The reason is that our Network is using categorical crossentropy, and softmax is just the right activation method for that.
+Next, I compose the LSTM Network. Note that **embed_dim**, **lstm_out**, **batch_size**, **droupout_x** variables are hyper parameters, their values are somehow intuitive, can be and must be played with in order to achieve good results. Please also note that I am using softmax as activation function. The reason is that our Network is using categorical crossentropy, and softmax is just the right activation method for that.
 
 ```python
 embed_dim = 128
@@ -227,7 +223,6 @@ Trainable params: 511,194 | |
 Non-trainable params: 0 | |
 
 ---
-
 ### Let's train the model
 
 Here we train the Network. We should run much more than 15 epoch, but I would have to wait forever (run it later), so it is 15 for now.
@@ -239,7 +234,6 @@ you will see progress bar (if you want to shut it up use verbose = 0)
 
 Lets test the model with test data
 
----
 
 ### Let evaluate the model
 
@@ -262,14 +256,13 @@ avg / total    |   0.82  |    0.83    |  0.83    |  2146
 > It is clear that finding negative tweets (**class 0**) goes very well (**recall 0.92**) for the Network but deciding whether is positive (**class 1**) is not really (**recall 0.52**). My educated guess here is that the positive training set is dramatically smaller than the negative, hence the "bad" results for positive tweets.
 
 -----
-
 ## Solving data imbalance problem
 
 **1. Up-sample Minority Class**
 
-> Up-sampling is the process of randomly duplicating observations from the minority class in order to reinforce its signal. There are several heuristics for doing so, but the most common way is to simply resample with replacement.
+Up-sampling is the process of randomly duplicating observations from the minority class in order to reinforce its signal. There are several heuristics for doing so, but the most common way is to simply resample with replacement.
 
-> It's important that we separate test set before upsampling because after upsampling there will be multiple copies of same data point and if we do train test split after upsamling the test set will not be compleatly unseen.  
+It's important that we separate test set before upsampling because after upsampling there will be multiple copies of same data point and if we do train test split after upsamling the test set will not be compleatly unseen.
 
 ```python
 # Separate majority and minority classes
@@ -299,7 +292,7 @@ negative data in training: 6794 <br>
 positive data in test: 447 <br>
 negative data in test: 1699 <br>
 
-> Now Lets do up-sampling
+Now Lets do up-sampling
 
 ```python
 # Separate majority and minority classes in training data for upsampling 
