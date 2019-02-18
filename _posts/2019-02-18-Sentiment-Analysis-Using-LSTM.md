@@ -224,5 +224,21 @@ you will see progress bar (if you want to shut it up use verbose = 0)
 Lets test the model with test data
 
 ```python
-
+Y_pred = model.predict_classes(X_test,batch_size = batch_size)
+df_test = pd.DataFrame({'true': Y_test.tolist(), 'pred':Y_pred})
+df_test['true'] = df_test['true'].apply(lambda x: np.argmax(x))
+# print("confusion matrix",confusion_matrix(df_test.true, df_test.pred))
+report = classification_report(df_test.true, df_test.pred)
+print(report)
 ```
+
+        |  precision  |  recall | f1-score  | support
+---------------------------------------------------------
+          0   |    0.88   |   0.91  |    0.90    |  1713
+          1    |   0.60   |   0.51   |   0.55     |  433
+
+avg / total    |   0.82  |    0.83    |  0.83    |  2146
+
+It is clear that finding negative tweets (**class 0**) goes very well (**recall 0.92**) for the Network but deciding whether is positive (**class 1**) is not really (**recall 0.52**). My educated guess here is that the positive training set is dramatically smaller than the negative, hence the "bad" results for positive tweets.
+
+## Solving data imbalance problem
