@@ -202,21 +202,27 @@ model.add(Dense(2,activation='softmax'))
 model.compile(loss = 'categorical_crossentropy', optimizer='adam',metrics = ['accuracy'])
 print(model.summary())
 ```
-_________________________________________________________________
-Layer (type)                 Output Shape              Param #   
-=================================================================
-embedding_1 (Embedding)      (None, 28, 128)           256000    
-_________________________________________________________________
-spatial_dropout1d_1 (Spatial (None, 28, 128)           0         
-_________________________________________________________________
-lstm_1 (LSTM)                (None, 196)               254800    
-_________________________________________________________________
-dense_1 (Dense)              (None, 2)                 394       
-=================================================================
-Total params: 511,194
-Trainable params: 511,194
-Non-trainable params: 0
-_________________________________________________________________
-None
+
+Layer (type)         |        Output Shape        |      Param #   
+-----------------------------------------------------------------
+embedding_1 (Embedding)   |   (None, 28, 128)     |      256000    
+spatial_dropout1d_1 (Spatial |(None, 28, 128)     |      0         
+lstm_1 (LSTM)       |         (None, 196)          |     254800    
+dense_1 (Dense)      |        (None, 2)             |    394       
+Total params: 511,194 | |
+Trainable params: 511,194 | |
+Non-trainable params: 0 | |
 
 
+Here we train the Network. We should run much more than 15 epoch, but I would have to wait forever (run it later), so it is 15 for now.
+```python
+batch_size = 128
+model.fit(X_train, Y_train, epochs = 15, batch_size=batch_size, verbose = 1)
+```
+you will see progress bar (if you want to shut it up use verbose = 0)
+
+Lets test the model with test data
+
+```python
+
+```
