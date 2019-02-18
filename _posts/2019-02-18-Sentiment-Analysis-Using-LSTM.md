@@ -62,7 +62,53 @@ import re
 - droping "Neutral" sentiment data
 
 ```python
-data = pd.read_csv('../input/Sentiment.csv')
+path = "./Sentimen.csv" # change to the path to the Sentiment.csv file
+data = pd.read_csv(path)
 data = data[['text','sentiment']]
 data = data[data.sentiment != "Neutral"]
 ```
+
+Let See the few lines of the data
+```python
+data.head()
+```
+
+output will be something like this
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>text</th>
+      <th>sentiment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>RT @NancyLeeGrahn: How did everyone feel about...</td>
+      <td>Neutral</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>RT @ScottWalker: Didn't catch the full #GOPdeb...</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>RT @TJMShow: No mention of Tamir Rice and the ...</td>
+      <td>Neutral</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>RT @RobGeorge: That Carly Fiorina is trending ...</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>RT @DanScavino: #GOPDebate w/ @realDonaldTrump...</td>
+      <td>Positive</td>
+    </tr>
+  </tbody>
+</table>
+
