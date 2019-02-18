@@ -232,13 +232,80 @@ report = classification_report(df_test.true, df_test.pred)
 print(report)
 ```
 
-        |  precision  |  recall | f1-score  | support
----------------------------------------------------------
-          0   |    0.88   |   0.91  |    0.90    |  1713
-          1    |   0.60   |   0.51   |   0.55     |  433
+class  |  precision  |  recall | f1-score  | support
+-------|-------------|---------|-----------|--------------
+   0   |    0.88     |   0.91  |    0.90   |  1713
+   1   |    0.60     |   0.51  |    0.55   |  433
 
 avg / total    |   0.82  |    0.83    |  0.83    |  2146
 
 It is clear that finding negative tweets (**class 0**) goes very well (**recall 0.92**) for the Network but deciding whether is positive (**class 1**) is not really (**recall 0.52**). My educated guess here is that the positive training set is dramatically smaller than the negative, hence the "bad" results for positive tweets.
 
 ## Solving data imbalance problem
+
+**1. Up-sample Minority Class**
+
+Up-sampling is the process of randomly duplicating observations from the minority class in order to reinforce its signal.
+There are several heuristics for doing so, but the most common way is to simply resample with replacement.
+
+It's important that we separate test set before upsampling because after upsampling there will be multiple copies of
+same data point and if we do train test split after upsamling the test set will not be compleatly unseen.  
+
+```python
+# Separate majority and minority classes
+
+data_majority = data[data['sentiment'] == 'Negative']
+data_minority = data[data['sentiment'] == 'Positive']
+
+bias = data_minority.shape[0]/data_majority.shape[0]
+# lets split train/test data first then 
+train = pd.concat([data_majority.sample(frac=0.8,random_state=200),
+         data_minority.sample(frac=0.8,random_state=200)])
+test = pd.concat([data_majority.drop(data_majority.sample(frac=0.8,random_state=200).index),
+        data_minority.drop(data_minority.sample(frac=0.8,random_state=200).index)])
+
+train = shuffle(train)
+test = shuffle(test)
+
+print('positive data in training:',(train.sentiment == 'Positive').sum())
+print('negative data in training:',(train.sentiment == 'Negative').sum())
+print('positive data in test:',(test.sentiment == 'Positive').sum())
+print('negative data in test:',(test.sentiment == 'Negative').sum())
+
+```
+positive data in training: 1789 <br>
+negative data in training: 6794 <br>
+positive data in test: 447 <br>
+negative data in test: 1699 <br>
+
+Now Lets do up-sampling
+
+```python
+# Separate majority and minority classes in training data for upsampling 
+data_majority = train[train['sentiment'] == 'Negative']
+data_minority = train[train['sentiment'] == 'Positive']
+
+print("majority class before upsample:",data_majority.shape)
+print("minority class before upsample:",data_minority.shape)
+
+# Upsample minority class
+data_minority_upsampled = resample(data_minority, 
+                                 replace=True,     # sample with replacement
+                                 n_samples= data_majority.shape[0],    # to match majority class
+                                 random_state=123) # reproducible results
+ 
+# Combine majority class with upsampled minority class
+data_upsampled = pd.concat([data_majority, data_minority_upsampled])
+ 
+# Display new class counts
+print("After upsampling\n",data_upsampled.sentiment.value_counts(),sep = "")
+```
+Output:
+```
+majority class before upsample: (6794, 2)
+minority class before upsample: (1789, 2)
+After upsampling
+Positive    6794
+Negative    6794
+
+```
