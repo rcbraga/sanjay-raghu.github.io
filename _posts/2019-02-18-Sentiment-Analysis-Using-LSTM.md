@@ -204,9 +204,9 @@ print(model.summary())
 ```
 
 Layer (type)         |        Output Shape        |      Param #   
------------------------------------------------------------------
+----------------------|---------------------------|----------------
 embedding_1 (Embedding)   |   (None, 28, 128)     |      256000    
-spatial_dropout1d_1 (Spatial |(None, 28, 128)     |      0         
+spatial_dropout1d_1 (Spatial) |(None, 28, 128)     |      0         
 lstm_1 (LSTM)       |         (None, 196)          |     254800    
 dense_1 (Dense)      |        (None, 2)             |    394       
 Total params: 511,194 | |
