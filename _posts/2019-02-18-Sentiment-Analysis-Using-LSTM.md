@@ -253,11 +253,12 @@ same data point and if we do train test split after upsamling the test set will 
 
 ```python
 # Separate majority and minority classes
-
 data_majority = data[data['sentiment'] == 'Negative']
 data_minority = data[data['sentiment'] == 'Positive']
 
+# will be used later in defining class weights
 bias = data_minority.shape[0]/data_majority.shape[0]
+
 # lets split train/test data first then 
 train = pd.concat([data_majority.sample(frac=0.8,random_state=200),
          data_minority.sample(frac=0.8,random_state=200)])
@@ -309,3 +310,114 @@ Positive    6794
 Negative    6794
 
 ```
+Let's repeat the preprocessing step and define model again
+
+```python
+max_fatures = 2000
+tokenizer = Tokenizer(num_words=max_fatures, split=' ')
+tokenizer.fit_on_texts(data['text'].values) # training with whole data
+
+X_train = tokenizer.texts_to_sequences(data_upsampled['text'].values)
+X_train = pad_sequences(X_train,maxlen=29)
+Y_train = pd.get_dummies(data_upsampled['sentiment']).values
+print('x_train shape:',X_train.shape)
+
+X_test = tokenizer.texts_to_sequences(test['text'].values)
+X_test = pad_sequences(X_test,maxlen=29)
+Y_test = pd.get_dummies(test['sentiment']).values
+print("x_test shape", X_test.shape)
+
+# model
+embed_dim = 128
+lstm_out = 192
+
+model = Sequential()
+model.add(Embedding(max_fatures, embed_dim,input_length = X_train.shape[1]))
+model.add(SpatialDropout1D(0.4))
+model.add(LSTM(lstm_out, dropout=0.4, recurrent_dropout=0.4))
+model.add(Dense(2,activation='softmax'))
+model.compile(loss = 'categorical_crossentropy', optimizer='adam',metrics = ['accuracy'])
+print(model.summary())
+```
+
+Lets define class weights as a dictionary, I have defined weight of majority class to be 1 and
+of minority class to be a multiple of $\frac{1}{bias}$
+
+```python
+batch_size = 128
+# also adding weights
+class_weights = {0: 1 ,
+                1: 1.6/bias }
+model.fit(X_train, Y_train, epochs = 15, batch_size=batch_size, verbose = 1,
+          class_weight=class_weights)
+
+```
+
+Epoch 1/15
+13588/13588 [==============================] - 10s 700us/step - loss: 1.2697 - acc: 0.5703
+Epoch 2/15
+13588/13588 [==============================] - 9s 627us/step - loss: 0.7914 - acc: 0.7612
+Epoch 3/15
+13588/13588 [==============================] - 8s 621us/step - loss: 0.6597 - acc: 0.8159
+Epoch 4/15
+13588/13588 [==============================] - 8s 623us/step - loss: 0.5813 - acc: 0.8403
+Epoch 5/15
+13588/13588 [==============================] - 8s 621us/step - loss: 0.5450 - acc: 0.8534
+Epoch 6/15
+13588/13588 [==============================] - 8s 622us/step - loss: 0.4764 - acc: 0.8728
+Epoch 7/15
+13588/13588 [==============================] - 8s 620us/step - loss: 0.4493 - acc: 0.8817
+Epoch 8/15
+13588/13588 [==============================] - 8s 624us/step - loss: 0.4243 - acc: 0.8903
+Epoch 9/15
+13588/13588 [==============================] - 8s 624us/step - loss: 0.3913 - acc: 0.8970
+Epoch 10/15
+13588/13588 [==============================] - 8s 625us/step - loss: 0.3829 - acc: 0.9012
+Epoch 11/15
+13588/13588 [==============================] - 8s 622us/step - loss: 0.3653 - acc: 0.9062
+Epoch 12/15
+13588/13588 [==============================] - 8s 621us/step - loss: 0.3579 - acc: 0.9104
+Epoch 13/15
+13588/13588 [==============================] - 8s 619us/step - loss: 0.3393 - acc: 0.9152
+Epoch 14/15
+13588/13588 [==============================] - 8s 621us/step - loss: 0.3256 - acc: 0.9169
+Epoch 15/15
+13588/13588 [==============================] - 8s 620us/step - loss: 0.3225 - acc: 0.9185
+
+### Model evaluation
+
+```python
+Y_pred = model.predict_classes(X_test,batch_size = batch_size)
+df_test = pd.DataFrame({'true': Y_test.tolist(), 'pred':Y_pred})
+df_test['true'] = df_test['true'].apply(lambda x: np.argmax(x))
+print(classification_report(df_test.true, df_test.pred))
+```
+
+            | precision  |  recall | f1-score  | support
+------------|------------|----------|----------|--------------
+           0   |    0.92    |  0.81   |   0.86  |    1699
+           1    |   0.50   |   0.72   |   0.59   |    447
+weighted avg   |    0.83   |   0.79   |   0.80   |   2146
+
+
+So the class imbalance is reduced significantly recall value for positive tweets (Class 1) improved from 0.54 to 0.77. It is always not possible to reduce it completely. 
+You may also noticed that the recall value for Negative tweets also decreased from 0.90 to 0.78  but this can be improved using training model to more epochs and tuning the hyperparameters.
+
+### model inference 
+```python
+twt = ['keep up the good work']
+#vectorizing the tweet by the pre-fitted tokenizer instance
+twt = tokenizer.texts_to_sequences(twt)
+#padding the tweet to have exactly the same shape as `embedding_2` input
+twt = pad_sequences(twt, maxlen=29, dtype='int32', value=0)
+
+sentiment = model.predict(twt,batch_size=1,verbose = 2)[0]
+if(np.argmax(sentiment) == 0):
+    print("negative")
+elif (np.argmax(sentiment) == 1):
+    print("positive")
+```
+
+Positive
+
+Try varying the class weight and run the model to bigger epoch number (100) and find best value your self.
