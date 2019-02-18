@@ -10,6 +10,9 @@ tags:
 ---
 [Github](https://github.com/sanjay-raghu) <br/>
 [Linkedin](https://www.linkedin.com/in/sanjayiitg/) <br/>
+
+...
+
 **Sentiment Analysis:** the process of computationally identifying and categorizing opinions expressed in a piece of text, especially in order to determine whether the writer's attitude towards a particular topic, product, etc. is positive, negative, or neutral.
 
 **What's New** I have added how to deal with data imbalance. Almost all classification task have this problem as number of data of every class if different. For current dataset number of data having positive sentiments is very low relative to data with negative sentiment.
@@ -18,26 +21,29 @@ tags:
 - upsampling 
 - using class weighted loss function
 
-## Dataset
+**Dataset**
 First GOP Debate Twitter Sentiment
 About this Dataset
 This data originally came from [Crowdflower's Data for Everyone library](http://www.crowdflower.com/data-for-everyone).
 
-As the original source says,
-We looked through tens of thousands of tweets about the early August GOP debate in Ohio and asked contributors to do both
-sentiment analysis and data categorization. Contributors were asked if the tweet was relevant, which candidate was mentioned,
-what subject was mentioned, and then what the sentiment was for a given tweet. We've removed the non-relevant messages from
-the uploaded dataset.
+> As the original source says,
+> We looked through tens of thousands of tweets about the early August GOP debate in Ohio and asked contributors to do both
+> sentiment analysis and data categorization. Contributors were asked if the tweet was relevant, which candidate was mentioned,
+> what subject was mentioned, and then what the sentiment was for a given tweet. We've removed the non-relevant messages from
+> the uploaded dataset.
 
-## **Details about model**
+**Details about model**
 
  - model contains 3 layers (Embedding, LSTM, Dense with softmax).
  - Upsampling is used to balance the data of minority class.
  - Loss fuction with different class weight in keras to further reduce class imbalance.
 
+
 ## Lets start coding
+
+---
 ### Importing usefull packages
-Lets first import all import libraries that will be used. 
+Lets first import all libraries that will be using. 
 
 ```python
 import numpy as np # linear algebra
@@ -56,6 +62,9 @@ from sklearn.metrics import confusion_matrix,classification_report
 import re
 
 ```
+
+---
+
 ### Data Preprocessing
 - reading the data
 - kepping only neccessary columns
@@ -112,10 +121,10 @@ output will be something like this
   </tbody>
 </table>
 
-A few things to notice here
+> A few things to notice here
 - "RT @..." in start of every tweet
 - a lot of special characters <br>
-We have to remove all this noise also lets convert text into lower case.
+> We have to remove all this noise also lets convert text into lower case.
 
 ```python
 data['text'] = data['text'].apply(lambda x: x.lower()) #lower caseing
@@ -128,7 +137,7 @@ Lets see the data again
 data.head()
 ```
 
-You should see something like this
+> You should see something like this
 
 <table border="1" class="dataframe">
   <thead>
@@ -188,7 +197,11 @@ X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 0.20, rando
 print(X_train.shape,Y_train.shape)
 
 ```
-Next, I compose the LSTM Network. Note that **embed_dim**, **lstm_out**, **batch_size**, **droupout_x** variables are hyper parameters, their values are somehow intuitive, can be and must be played with in order to achieve good results. Please also note that I am using softmax as activation function. The reason is that our Network is using categorical crossentropy, and softmax is just the right activation method for that.
+
+---
+
+### Defining model
+> Next, I compose the LSTM Network. Note that **embed_dim**, **lstm_out**, **batch_size**, **droupout_x** variables are hyper parameters, their values are somehow intuitive, can be and must be played with in order to achieve good results. Please also note that I am using softmax as activation function. The reason is that our Network is using categorical crossentropy, and softmax is just the right activation method for that.
 
 ```python
 embed_dim = 128
@@ -213,6 +226,9 @@ Total params: 511,194 | |
 Trainable params: 511,194 | |
 Non-trainable params: 0 | |
 
+---
+
+### Let's train the model
 
 Here we train the Network. We should run much more than 15 epoch, but I would have to wait forever (run it later), so it is 15 for now.
 ```python
@@ -222,6 +238,10 @@ model.fit(X_train, Y_train, epochs = 15, batch_size=batch_size, verbose = 1)
 you will see progress bar (if you want to shut it up use verbose = 0)
 
 Lets test the model with test data
+
+---
+
+### Let evaluate the model
 
 ```python
 Y_pred = model.predict_classes(X_test,batch_size = batch_size)
@@ -239,17 +259,17 @@ class  |  precision  |  recall | f1-score  | support
 
 avg / total    |   0.82  |    0.83    |  0.83    |  2146
 
-It is clear that finding negative tweets (**class 0**) goes very well (**recall 0.92**) for the Network but deciding whether is positive (**class 1**) is not really (**recall 0.52**). My educated guess here is that the positive training set is dramatically smaller than the negative, hence the "bad" results for positive tweets.
+> It is clear that finding negative tweets (**class 0**) goes very well (**recall 0.92**) for the Network but deciding whether is positive (**class 1**) is not really (**recall 0.52**). My educated guess here is that the positive training set is dramatically smaller than the negative, hence the "bad" results for positive tweets.
+
+-----
 
 ## Solving data imbalance problem
 
 **1. Up-sample Minority Class**
 
-Up-sampling is the process of randomly duplicating observations from the minority class in order to reinforce its signal.
-There are several heuristics for doing so, but the most common way is to simply resample with replacement.
+> Up-sampling is the process of randomly duplicating observations from the minority class in order to reinforce its signal. There are several heuristics for doing so, but the most common way is to simply resample with replacement.
 
-It's important that we separate test set before upsampling because after upsampling there will be multiple copies of
-same data point and if we do train test split after upsamling the test set will not be compleatly unseen.  
+> It's important that we separate test set before upsampling because after upsampling there will be multiple copies of same data point and if we do train test split after upsamling the test set will not be compleatly unseen.  
 
 ```python
 # Separate majority and minority classes
@@ -279,7 +299,7 @@ negative data in training: 6794 <br>
 positive data in test: 447 <br>
 negative data in test: 1699 <br>
 
-Now Lets do up-sampling
+> Now Lets do up-sampling
 
 ```python
 # Separate majority and minority classes in training data for upsampling 
@@ -384,6 +404,7 @@ Epoch 14/15
 Epoch 15/15
 13588/13588 [==============================] - 8s 620us/step - loss: 0.3225 - acc: 0.9185
 
+----
 ### Model evaluation
 
 ```python
@@ -403,6 +424,8 @@ weighted avg   |    0.83   |   0.79   |   0.80   |   2146
 So the class imbalance is reduced significantly recall value for positive tweets (Class 1) improved from 0.54 to 0.77. It is always not possible to reduce it completely. 
 You may also noticed that the recall value for Negative tweets also decreased from 0.90 to 0.78  but this can be improved using training model to more epochs and tuning the hyperparameters.
 
+-------
+
 ### model inference 
 ```python
 twt = ['keep up the good work']
@@ -420,4 +443,5 @@ elif (np.argmax(sentiment) == 1):
 
 Positive
 
+------
 Try varying the class weight and run the model to bigger epoch number (100) and find best value your self.
