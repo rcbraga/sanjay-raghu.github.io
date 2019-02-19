@@ -42,6 +42,7 @@ This data originally came from [Crowdflower's Data for Everyone library ](http:/
  - model contains 3 layers (Embedding, LSTM, Dense with softmax).
  - Up-sampling is used to balance the data of minority class.
  - Loss function with different class weight in keras to further reduce class imbalance.
+
 ## Lets start coding
 ### Importing useful packages
 Lets first import all libraries. Please make sure that you have these libraries installed.   
