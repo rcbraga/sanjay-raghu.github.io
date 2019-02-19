@@ -14,21 +14,23 @@ don't have to worry about installing anything just run Notebook directly.
 
 
 
-**Sentiment Analysis:** The process of computationally identifying and categorizing opinions expressed in a piece of text, especially in order to determine whether the writer's attitude towards a particular topic, product, etc. is positive, negative, or neutral. In common ML words its just a classification problem. 
+**Sentiment Analysis:**<br> 
+The process of computationally identifying and categorizing opinions expressed in a piece of text, especially in order to determine whether the writer's attitude towards a particular topic, product, etc. is positive, negative, or neutral. In common ML words its just a classification problem. 
 
-**What is class imbalance**: It is the problem in machine learning where the total number of a class of data (positive) is far less than the total number of another class of data (negative). This problem is extremely common in practice and can be observed in various disciplines including fraud detection, anomaly detection, medical diagnosis, oil spillage detection, facial recognition, etc.
+**What is class imbalance:**<br>
+It is the problem in machine learning where the total number of a class of data (positive) is far less than the total number of another class of data (negative). This problem is extremely common in practice and can be observed in various disciplines including fraud detection, anomaly detection, medical diagnosis, oil spillage detection, facial recognition, etc.
 
 If you want to know more about class imbalance problem, [here](http://www.chioka.in/class-imbalance-problem/) is a link of a great blog post
 
-**Solving class imbalanced data**:
+**Solving class imbalanced data:**<br>
 I am using the two most effective ways to mitigate this:<br>
 - Up sampling 
 - Using class weighted loss function
 
-**Dataset**
+**Dataset**<br>
 First GOP Debate Twitter Sentiment
 About this Dataset
-This data originally came from [Crowdflower's Data for Everyone library](http://www.crowdflower.com/data-for-everyone).
+This data originally came from [Crowdflower's Data for Everyone library ](http://www.crowdflower.com/data-for-everyone).
 
 > As the original source says,
 > We looked through tens of thousands of tweets about the early August GOP debate in Ohio and asked contributors to do both
@@ -36,13 +38,10 @@ This data originally came from [Crowdflower's Data for Everyone library](http://
 > what subject was mentioned, and then what the sentiment was for a given tweet. We've removed the non-relevant messages from
 > the uploaded dataset.
 
-**Details about model**
-
+**Details about model**<br>
  - model contains 3 layers (Embedding, LSTM, Dense with softmax).
- - Upsampling is used to balance the data of minority class.
- - Loss fuction with different class weight in keras to further reduce class imbalance.
-
----------------------------------------------------------------------------------------------------------------------------------------
+ - Up-sampling is used to balance the data of minority class.
+ - Loss function with different class weight in keras to further reduce class imbalance.
 ## Lets start coding
 ### Importing useful packages
 Lets first import all libraries. Please make sure that you have these libraries installed.   
