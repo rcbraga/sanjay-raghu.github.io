@@ -258,11 +258,9 @@ class  |  precision  |  recall | f1-score  | support
 avg / total    |   0.82  |    0.83    |  0.83    |  2146
 
 > It is clear that finding negative tweets (**class 0**) goes very well (**recall 0.92**) for the Network but deciding whether is positive (**class 1**) is not really (**recall 0.52**). My educated guess here is that the positive training set is dramatically smaller than the negative, hence the "bad" results for positive tweets.
-
------
 ## Solving data imbalance problem
 
-**1. Up-sample Minority Class**
+**Up-sample Minority Class**
 
 Up-sampling is the process of randomly duplicating observations from the minority class in order to reinforce its signal. There are several heuristics for doing so, but the most common way is to simply re-sample with replacement.
 
