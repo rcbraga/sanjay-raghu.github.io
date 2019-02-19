@@ -1,5 +1,5 @@
 ---
-title: "Sentiment Analysis using LSTM model, Class imbalance problem, Keras with Scikit Learn"
+title: "Sentiment Analysis using LSTM model, Class Imbalance Problem, Keras with Scikit Learn"
 tags:
   - sentiment analysis
   - text analysis
@@ -8,17 +8,22 @@ tags:
   - data imbalance
   - weighted loss fuction
 ---
-[Github](https://github.com/sanjay-raghu) <br/>
-[Linkedin](https://www.linkedin.com/in/sanjayiitg/) <br/>
----
+The code in this post can be found at my [Github](https://github.com/sanjay-raghu) repository. If you are also interested in trying out the code
+I have also written a code in Jupyter Notebook form on [Kaggle](https://www.kaggle.com/sanjay11100/lstm-sentiment-analysis-data-imbalance-keras) there you
+don't have to worry about installing anything just run Notebook directly.   
 
-**Sentiment Analysis:** the process of computationally identifying and categorizing opinions expressed in a piece of text, especially in order to determine whether the writer's attitude towards a particular topic, product, etc. is positive, negative, or neutral.
 
-**What's New** I have added how to deal with data imbalance. Almost all classification task have this problem as number of data of every class if different. For current dataset number of data having positive sentiments is very low relative to data with negative sentiment.
 
-**Solving class imbalaned data**:
-- upsampling 
-- using class weighted loss function
+**Sentiment Analysis:** The process of computationally identifying and categorizing opinions expressed in a piece of text, especially in order to determine whether the writer's attitude towards a particular topic, product, etc. is positive, negative, or neutral. In common ML words its just a classification problem. 
+
+**What is class imbalance**: It is the problem in machine learning where the total number of a class of data (positive) is far less than the total number of another class of data (negative). This problem is extremely common in practice and can be observed in various disciplines including fraud detection, anomaly detection, medical diagnosis, oil spillage detection, facial recognition, etc.
+
+If you want to know more about class imbalance problem, [here](http://www.chioka.in/class-imbalance-problem/) is a link of a great blog post
+
+**Solving class imbalanced data**:
+I am using the two most effective ways to mitigate this:<br>
+- Up sampling 
+- Using class weighted loss function
 
 **Dataset**
 First GOP Debate Twitter Sentiment
@@ -37,10 +42,10 @@ This data originally came from [Crowdflower's Data for Everyone library](http://
  - Upsampling is used to balance the data of minority class.
  - Loss fuction with different class weight in keras to further reduce class imbalance.
 
-
+---------------------------------------------------------------------------------------------------------------------------------------
 ## Lets start coding
-### Importing usefull packages
-Lets first import all libraries that will be using. 
+### Importing useful packages
+Lets first import all libraries. Please make sure that you have these libraries installed.   
 
 ```python
 import numpy as np # linear algebra
@@ -260,9 +265,9 @@ avg / total    |   0.82  |    0.83    |  0.83    |  2146
 
 **1. Up-sample Minority Class**
 
-Up-sampling is the process of randomly duplicating observations from the minority class in order to reinforce its signal. There are several heuristics for doing so, but the most common way is to simply resample with replacement.
+Up-sampling is the process of randomly duplicating observations from the minority class in order to reinforce its signal. There are several heuristics for doing so, but the most common way is to simply re-sample with replacement.
 
-It's important that we separate test set before upsampling because after upsampling there will be multiple copies of same data point and if we do train test split after upsamling the test set will not be compleatly unseen.
+It's important that we separate test set before up-sampling because after up-sampling there will be multiple copies of same data point and if we do train test split after up-sampling the test set will not be completely unseen.
 
 ```python
 # Separate majority and minority classes
@@ -295,7 +300,7 @@ negative data in test: 1699 <br>
 Now Lets do up-sampling
 
 ```python
-# Separate majority and minority classes in training data for upsampling 
+# Separate majority and minority classes in training data for up sampling 
 data_majority = train[train['sentiment'] == 'Negative']
 data_minority = train[train['sentiment'] == 'Positive']
 
@@ -407,15 +412,15 @@ df_test['true'] = df_test['true'].apply(lambda x: np.argmax(x))
 print(classification_report(df_test.true, df_test.pred))
 ```
 
-            | precision  |  recall | f1-score  | support
-------------|------------|----------|----------|--------------
-           0   |    0.92    |  0.81   |   0.86  |    1699
-           1    |   0.50   |   0.72   |   0.59   |    447
+ -   | precision  |  recall | f1-score  | support 
+-----|---------   |----------|----------|------------
+0   |    0.92    |  0.81   |   0.86  |    1699
+1    |   0.50   |   0.72   |   0.59   |    447
 weighted avg   |    0.83   |   0.79   |   0.80   |   2146
 
 
 So the class imbalance is reduced significantly recall value for positive tweets (Class 1) improved from 0.54 to 0.77. It is always not possible to reduce it completely. 
-You may also noticed that the recall value for Negative tweets also decreased from 0.90 to 0.78  but this can be improved using training model to more epochs and tuning the hyperparameters.
+You may also noticed that the recall value for Negative tweets also decreased from 0.90 to 0.78  but this can be improved using training model to more epochs and tuning the hyper-parameters.
 
 -------
 
