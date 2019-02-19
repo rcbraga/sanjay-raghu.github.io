@@ -371,7 +371,6 @@ model.fit(X_train, Y_train, epochs = 15, batch_size=batch_size, verbose = 1,
 
 Epoch 1/15
 13588/13588 [==============================] - 10s 700us/step - loss: 1.2697 - acc: 0.5703<br>
-. . .
 Epoch 15/15
 13588/13588 [==============================] - 8s 620us/step - loss: 0.3225 - acc: 0.9185
 
@@ -384,7 +383,7 @@ df_test['true'] = df_test['true'].apply(lambda x: np.argmax(x))
 print(classification_report(df_test.true, df_test.pred))
 ```
 
-     | precision  |  recall | f1-score  | support 
+ class    | precision  |  recall | f1-score  | support 
 -----|------------|----------|----------|------------
 0   |    0.92    |  0.81   |   0.86  |    1699
 1    |   0.50   |   0.72   |   0.59   |    447
