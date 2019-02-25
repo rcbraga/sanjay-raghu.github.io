@@ -357,7 +357,7 @@ print(model.summary())
 ```
 
 Lets define class weights as a dictionary, I have defined weight of majority class to be 1 and
-of minority class to be a multiple of $\frac{1}{bias}$
+of minority class to be a multiple of 1/bias
 
 ```python
 batch_size = 128
