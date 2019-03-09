@@ -6,9 +6,9 @@ permalink: /about/
 	
 ---
  ---------
-Data science is blooming profession right now. ~~You might have read in some articles "Data science is the sexiest job ...".~~
- Articles nowadays is filled with lines like "Data Scientist: The Sexiest Job of the 21st Century" or "Data scientists: the highest paid professionals".
- So What does that means? Data science is attracting a lot of crowd, like myself a lot a people
+Data science is blooming profession right now. 
+ Articles nowadays is filled with statements like "Data Scientist: The Sexiest Job of the 21st Century" or "Data scientists: the highest paid professionals".
+ So What does that actually means? Data science is attracting a lot of crowd, like myself a lot a people
 want to become a data scientist. A large proportion of data scientist today is
  self taught without having masters or PhD degrees in the respective field. This have been possible because there is a lot of free online
  material are available and its growing day by day. data science have a large community which is very supportive.
